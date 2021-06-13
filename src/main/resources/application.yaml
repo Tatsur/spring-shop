@@ -12,7 +12,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/spring_shop
     username: postgres
-    password: PGM3Tailbyn
+    password: postgres
     driver-class-name: org.postgresql.Driver
 
   liquibase:
