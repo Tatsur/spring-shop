@@ -1,7 +1,7 @@
 package com.ttsr.springshop.frontend;
 
+import com.ttsr.springshop.model.Cart;
 import com.ttsr.springshop.model.Product;
-import com.ttsr.springshop.model.repository.ProductRepository;
 import com.ttsr.springshop.service.CartService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -14,60 +14,47 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 
-@Route("main")
-public class MainView extends VerticalLayout {
-    private final Grid<Product> grid = new Grid<>(Product.class);
+import java.util.stream.Collectors;
 
-    private final ProductRepository productRepository;
+@Route("cart")
+public class CartView extends VerticalLayout {
+    private final Grid<Cart> grid = new Grid<>(Cart.class);
+
     private final CartService cartService;
 
-    public MainView(ProductRepository productRepository,
-                    CartService cartService) {
-        this.productRepository = productRepository;
+    public CartView(CartService cartService) {
         this.cartService = cartService;
 
-        initPage();
+        initCartGrid();
+        add(grid,initMainButton());
     }
-
-    private void initPage() {
-        initProductGrid();
-
-        add(grid, initCartButton());
-    }
-
-    private HorizontalLayout initCartButton() {
-        var addToCartButton = new Button("Add to cart", items -> {
-            cartService.addProduct(grid.getSelectedItems());
-            Notification.show("Product added successfully");
+    private HorizontalLayout initMainButton() {
+        var toCartButton = new Button("Shop", item -> {
+            cartService.saveCart(cartService.getProducts());
+            UI.getCurrent().navigate("main");
         });
 
-        var toCartButton = new Button("Cart", item -> {
-            UI.getCurrent().navigate("cart");
-        });
-
-        return new HorizontalLayout(addToCartButton, toCartButton);
+        return new HorizontalLayout(toCartButton);
     }
 
-    private void initProductGrid() {
-        var products = productRepository.findAll();
+    private void initCartGrid() {
+        var products = cartService.getProducts();
 
         grid.setItems(products);
         grid.setColumns("name", "count");
         grid.setSizeUndefined();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        ListDataProvider<Product> dataProvider = DataProvider.ofCollection(products);
+        ListDataProvider<Cart> dataProvider = DataProvider.ofCollection(products);
         grid.setDataProvider(dataProvider);
 
         grid.addColumn(new ComponentRenderer<>(item -> {
             var plusButton = new Button("+", i -> {
-                item.incrementCount();
-                productRepository.save(item);
+                cartService.increaseProductCount(item);
                 grid.getDataProvider().refreshItem(item);
             });
 
             var minusButton = new Button("-", i -> {
-                item.decreaseCount();
-                productRepository.save(item);
+                cartService.decreaseProductCount(item);
                 grid.getDataProvider().refreshItem(item);
             });
 
