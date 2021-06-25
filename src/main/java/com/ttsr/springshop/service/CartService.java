@@ -32,14 +32,14 @@ public class CartService {
     }
 
     public void addProduct(Set<Product> products) {
-        Set<Cart> dbProducts = this.products.stream()
+        Set<Product> dbProducts = products.stream()
                 .filter(it -> productService.findById(it.getId()) != null)
                 .collect(Collectors.toSet());
         this.products.addAll(dbProducts.stream().map(
                 it -> {
                     var newProduct = new Cart();
                     newProduct.setCount(1);
-                    newProduct.setProductName(it.getProductName());
+                    newProduct.setProductName(it.getName());
                     newProduct.setId(it.getId());
                     return newProduct;
                 }
