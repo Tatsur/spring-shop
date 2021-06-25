@@ -2,6 +2,7 @@ package com.ttsr.springshop.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.persistence.*;

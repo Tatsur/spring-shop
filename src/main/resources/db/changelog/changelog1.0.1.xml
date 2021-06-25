@@ -4,8 +4,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="init-product-values" author="M.T.">
-        <createTable tableName="order">
+    <changeSet id="init-order-product" author="M.T.">
+        <createTable tableName="orders">
             <column name="id" type="uuid">
                 <constraints primaryKey="true"/>
             </column>
@@ -13,18 +13,14 @@
                 <constraints nullable="false" foreignKeyName="fk_cart_id" references="cart(id)"/>
             </column>
         </createTable>
-        <addColumn tableName="cart" >
-            <column name="product_name" type="varchar(36)">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
 
         <sql>
-            insert into product(id, name, count) values(uuid_generate_v4(), 'Shoes', 10),
-            values(uuid_generate_v4(), 'T-shirt', 100),
-            values(uuid_generate_v4(), 'Coat', 50),
-            values(uuid_generate_v4(), 'Skirt', 15),
-            values(uuid_generate_v4(), 'Jeans', 110);
+            insert into product(id, name, count) values
+            (uuid_generate_v4(), 'Shoes', 10),
+            (uuid_generate_v4(), 'T-shirt', 100),
+            (uuid_generate_v4(), 'Coat', 50),
+            (uuid_generate_v4(), 'Skirt', 15),
+            (uuid_generate_v4(), 'Jeans', 110)
         </sql>
     </changeSet>
 

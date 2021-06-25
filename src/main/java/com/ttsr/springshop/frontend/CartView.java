@@ -41,7 +41,7 @@ public class CartView extends VerticalLayout {
         var products = cartService.getProducts();
 
         grid.setItems(products);
-        grid.setColumns("name", "count");
+        grid.setColumns("productName", "count");
         grid.setSizeUndefined();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         ListDataProvider<Cart> dataProvider = DataProvider.ofCollection(products);

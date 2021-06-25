@@ -26,6 +26,13 @@ public class ProductService {
 
     public Product save(Product product) {
         Product updated = new Product();
+        UUID productId = product.getId();
+        UUID updatedId;
+        if(product.getId() == null)
+            updatedId = UUID.randomUUID();
+        else updatedId = productId;
+
+        updated.setId(updatedId);
         updated.setName(product.getName());
         updated.setCount(product.getCount());
         updated = productRepository.save(updated);

@@ -4,8 +4,10 @@ import com.ttsr.springshop.model.Cart;
 import com.ttsr.springshop.model.Product;
 import com.ttsr.springshop.model.repository.CartRepository;
 import com.ttsr.springshop.model.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,11 +16,13 @@ public class CartService {
 
     private final List<Cart> products;
 
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
-    private ProductService productService;
+    private final ProductService productService;
 
-    public CartService() {
+    public CartService(CartRepository cartRepository, ProductService productService) {
+        this.cartRepository = cartRepository;
+        this.productService = productService;
         products = cartRepository.findAll().stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 

@@ -1,11 +1,13 @@
 package com.ttsr.springshop.frontend;
 
+import com.ttsr.springshop.dto.ProductDto;
 import com.ttsr.springshop.model.Product;
-import com.ttsr.springshop.model.repository.ProductRepository;
 import com.ttsr.springshop.service.CartService;
+import com.ttsr.springshop.service.ProductService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,16 +16,18 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 
+import java.util.stream.Collectors;
+
 @Route("main")
 public class MainView extends VerticalLayout {
-    private final Grid<Product> grid = new Grid<>(Product.class);
+    private final Grid<ProductDto> grid = new Grid<>(ProductDto.class);
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final CartService cartService;
 
-    public MainView(ProductRepository productRepository,
+    public MainView(ProductService productService,
                     CartService cartService) {
-        this.productRepository = productRepository;
+        this.productService = productService;
         this.cartService = cartService;
 
         initPage();
@@ -37,7 +41,10 @@ public class MainView extends VerticalLayout {
 
     private HorizontalLayout initCartButton() {
         var addToCartButton = new Button("Add to cart", items -> {
-            cartService.addProduct(grid.getSelectedItems());
+            cartService.addProduct(grid.getSelectedItems()
+                    .stream()
+                    .map(Product::new)
+                    .collect(Collectors.toSet()));
             Notification.show("Product added successfully");
         });
 
@@ -49,29 +56,37 @@ public class MainView extends VerticalLayout {
     }
 
     private void initProductGrid() {
-        var products = productRepository.findAll();
+        var products = productService
+                .findAll()
+                .stream()
+                .map(ProductDto::new)
+                .collect(Collectors.toList());
 
         grid.setItems(products);
         grid.setColumns("name", "count");
         grid.setSizeUndefined();
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        ListDataProvider<Product> dataProvider = DataProvider.ofCollection(products);
+        ListDataProvider<ProductDto> dataProvider = DataProvider.ofCollection(products);
         grid.setDataProvider(dataProvider);
 
-        grid.addColumn(new ComponentRenderer<>(item -> {
+        grid.addColumn(new ComponentRenderer<>(item ->
+        {
+            var label = new Label("count");
+            var label2= new Label("count");
             var plusButton = new Button("+", i -> {
                 item.incrementCount();
-                productRepository.save(item);
-                grid.getDataProvider().refreshItem(item);
+                productService.save(new Product(item));
+                grid.getDataProvider().refreshItem(new ProductDto(item));
             });
 
             var minusButton = new Button("-", i -> {
                 item.decreaseCount();
-                productRepository.save(item);
-                grid.getDataProvider().refreshItem(item);
+                productService.save(new Product(item));
+                grid.getDataProvider().refreshItem(new ProductDto(item));
             });
 
-            return new HorizontalLayout(plusButton, minusButton);
+
+            return new HorizontalLayout(plusButton, minusButton,label,label2);
         }));
     }
 }
