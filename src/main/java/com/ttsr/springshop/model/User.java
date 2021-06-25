@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
@@ -17,8 +17,14 @@ public class User {
     private UUID id;
 
     private String name;
+    private String password;
     private String lastName;
     private String secondName;
     private String phone;
-    private String role;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> role;
 }

@@ -3,9 +3,12 @@ package com.ttsr.springshop.dto;
 import com.ttsr.springshop.model.Product;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
 @Data
+@Component
 @NoArgsConstructor
 public class ProductDto {
 
