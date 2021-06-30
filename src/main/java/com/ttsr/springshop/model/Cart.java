@@ -2,9 +2,11 @@ package com.ttsr.springshop.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -19,7 +21,23 @@ public class Cart {
 
     private UUID productId;
 
+    private String productName;
+
     private int count;
 
     private UUID userId;
+
+    public Cart(Product product) {
+        productId = product.getId();
+        productName = product.getName();
+        count = product.getCount();
+    }
+
+    public void incrementCount() {
+        this.count++;
+    }
+
+    public void decreaseCount() {
+        this.count--;
+    }
 }
