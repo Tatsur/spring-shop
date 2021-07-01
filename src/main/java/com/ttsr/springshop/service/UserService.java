@@ -3,6 +3,7 @@ package com.ttsr.springshop.service;
 import com.ttsr.springshop.model.Role;
 import com.ttsr.springshop.model.User;
 import com.ttsr.springshop.model.repository.UserRepository;
+import com.vaadin.flow.server.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,18 @@ public class UserService implements UserDetailsService {
                 user.getPassword(),
                 mapRolesToAuthorities(user.getRole())
         );
+    }
+
+    public void store(User user) throws ServiceException{
+        if (findByUsername(user.getLogin()).isEmpty()) {
+            userRepository.save(user);
+        }
+        throw new ServiceException("user already exists");
+    }
+
+    public String isUsernameValid(String username){
+        if(findByUsername(username).isEmpty()) return null;
+        return "username already exists";
     }
 
     public Optional<User> findByUsername(String username){

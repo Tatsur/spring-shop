@@ -1,5 +1,6 @@
 package com.ttsr.springshop.configuration.security;
 
+import com.ttsr.springshop.frontend.LoginView;
 import com.ttsr.springshop.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
-                .formLogin();
+                .formLogin().loginPage("/login").permitAll();
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
