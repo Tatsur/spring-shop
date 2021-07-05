@@ -6,16 +6,25 @@ import com.ttsr.springshop.service.CartService;
 import com.ttsr.springshop.service.ProductService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.BigDecimalField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Route;
 
+import java.awt.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Route("main")
@@ -24,6 +33,9 @@ public class MainView extends VerticalLayout {
 
     private final ProductService productService;
     private final CartService cartService;
+
+    private List<ProductDto> productDtoList = new ArrayList<>();
+    private final Map<String,String> filterParams = new HashMap<>();
 
     public MainView(ProductService productService,
                     CartService cartService) {
@@ -34,6 +46,7 @@ public class MainView extends VerticalLayout {
     }
 
     private void initPage() {
+        initFilter();
         initProductGrid();
 
         add(grid, initCartButton());
@@ -57,7 +70,7 @@ public class MainView extends VerticalLayout {
 
     private void initProductGrid() {
         var products = productService
-                .findAll()
+                .findAll(filterParams)
                 .stream()
                 .map(ProductDto::new)
                 .collect(Collectors.toList());
@@ -88,5 +101,24 @@ public class MainView extends VerticalLayout {
 
             return new HorizontalLayout(plusButton, minusButton,label,label2);
         }));
+    }
+    private void initFilter(){
+        var formLayout = new FormLayout();
+        var nameEq = new TextField("product name:");
+        var priceGreater = new BigDecimalField("price greater then:");
+        var priceLess = new BigDecimalField("price less then:");
+        var filterButton = new Button("Filter", e ->{
+            filterParams.put("name",nameEq.getValue());
+            filterParams.put("greater", String.valueOf(priceGreater.getValue()));
+            filterParams.put("less", String.valueOf(priceLess.getValue()));
+            productDtoList = productService
+                    .findAll(filterParams)
+                    .stream()
+                    .map(ProductDto::new)
+                    .collect(Collectors.toList());
+            grid.getDataProvider().refreshAll();
+        });
+        formLayout.add(nameEq,priceGreater,priceLess,filterButton);
+        add(formLayout);
     }
 }
