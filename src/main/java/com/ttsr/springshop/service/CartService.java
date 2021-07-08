@@ -80,6 +80,11 @@ public class CartService {
         }
     }
 
+    public void clear(){
+        cartRepository.deleteAll();
+        products.clear();
+    }
+
     public List<Cart> getProducts() {
         return products;
     }
