@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="init" author="v.eremin">
+        <sql>
+            create table user(
+                id uuid primary key,
+                login varchar(128),
+                password varchar(128),
+                role varchar(36)
+            );
+            create table product(
+                id uuid primary key,
+                name varchar(64),
+                count integer,
+                price numeric(8, 2)
+            );
+            create table role(
+            id int primary key,
+            name varchar(32)
+            );
+            create table users_roles (
+            user_id               uuid      not null,
+            role_id               uuid      not null,
+            primary key (user_id, role_id),
+            foreign key (user_id) references users (id),
+            foreign key (role_id) references roles (id)
+            );
+
+            insert into roles (name)
+            values
+                ('ROLE_USER'), ('ROLE_ADMIN');
+
+            insert into users (login, password, role)
+            values
+            ('user1', '$2a$10$AL3BxKTjXlbu7.9NA5hRPutAw752Mo3pA8QnZV7FnGbxOxyHAuqcG', 'ROLE_USER'),
+            ('user2', 'dxLMNz%p7.B2w']n+"ngMeLc7:V5Z;)~', 'ROLE_ADMIN');
+
+            insert into product(id, name, count, price)
+            values
+                ('a88dcc42-ec85-4a36-b166-dd15b32cf047', 'shoes', 5, 140),
+                ('57b8151a-4e29-480a-a7db-3c3092c9fc10', 'hat', 1, 200);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

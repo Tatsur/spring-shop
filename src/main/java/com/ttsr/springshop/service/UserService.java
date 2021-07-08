@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +35,10 @@ public class UserService implements UserDetailsService {
         );
     }
 
+    public User findById(UUID id){
+        return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException(String.format("User with id '%s' not found",id)));
+    }
+
     public void store(User user) throws ServiceException{
         if (findByUsername(user.getLogin()).isEmpty()) {
             userRepository.save(user);
@@ -46,7 +52,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> findByUsername(String username){
-        return userRepository.findByUsername(username);
+        return userRepository.findByLogin(username);
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
