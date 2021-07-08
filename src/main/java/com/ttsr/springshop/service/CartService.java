@@ -41,6 +41,8 @@ public class CartService {
                     newProduct.setCount(1);
                     newProduct.setProductName(it.getName());
                     newProduct.setId(it.getId());
+                    newProduct.setCount(it.getCount());
+                    newProduct.setPrice(it.getPrice());
                     return newProduct;
                 }
         ).collect(Collectors.toList()));

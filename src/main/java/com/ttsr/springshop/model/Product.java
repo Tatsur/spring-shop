@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -22,22 +23,27 @@ public class Product {
 
     private int count;
 
+    private BigDecimal price;
+
     public Product(Product product) {
         setId(product.getId());
         setName(product.getName());
         setCount(product.getCount());
+        setPrice(product.getPrice());
     }
 
     public Product(ProductDto product) {
         setId(product.getId());
         setName(product.getName());
         setCount(product.getCount());
+        setPrice(product.getPrice());
     }
 
     public Product(Cart cart) {
         setId(cart.getProductId());
         setName(cart.getProductName());
         setCount(cart.getCount());
+        setPrice(cart.getPrice());
     }
 
     public void incrementCount() {

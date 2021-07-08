@@ -42,6 +42,7 @@ public class ProductService {
         updated.setId(updatedId);
         updated.setName(product.getName());
         updated.setCount(product.getCount());
+        updated.setPrice(product.getPrice());
         updated = productRepository.save(updated);
         return updated;
     }
