@@ -19,5 +19,12 @@
         </createTable>
         <renameTable oldTableName="user" newTableName="users"/>
     </changeSet>
-
+    <changeSet id="alter-reviews" author="M.T.">
+        <addColumn tableName="review">
+            <column name="is_moderated" type="boolean" defaultValue="false"/>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

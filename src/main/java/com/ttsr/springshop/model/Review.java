@@ -15,7 +15,13 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
-    private String text;
+    @ManyToOne
+    private Product product;
 
-    private UUID productId;
+    @ManyToOne
+    private User user;
+
+    private Boolean isModerated;
+
+    private String text;
 }

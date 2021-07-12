@@ -28,4 +28,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> role;
+
+    public String getFIO() {
+        return String.format("%s %s %s",
+                getLastName() != null ? getLastName() : "",
+                getName() != null ? getName() : "",
+                getSecondName() != null ? getSecondName() : "");
+    }
 }
