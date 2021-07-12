@@ -1,5 +1,6 @@
 package com.ttsr.springshop.service;
 
+import com.ttsr.springshop.configuration.security.CustomPrincipal;
 import com.ttsr.springshop.model.Role;
 import com.ttsr.springshop.model.User;
 import com.ttsr.springshop.model.repository.UserRepository;
@@ -28,11 +29,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username).orElseThrow(()->
                         new UsernameNotFoundException(String.format("User '%s' not found", username)));
-        return new org.springframework.security.core.userdetails.User(
-                user.getName(),
-                user.getPassword(),
-                mapRolesToAuthorities(user.getRole())
-        );
+        return new CustomPrincipal(user,mapRolesToAuthorities(user.getRole()));
     }
 
     public User findById(UUID id){

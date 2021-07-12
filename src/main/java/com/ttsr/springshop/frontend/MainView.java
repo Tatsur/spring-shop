@@ -4,6 +4,7 @@ import com.ttsr.springshop.dto.ProductDto;
 import com.ttsr.springshop.model.Product;
 import com.ttsr.springshop.service.CartService;
 import com.ttsr.springshop.service.ProductService;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -81,6 +82,16 @@ public class MainView extends VerticalLayout {
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         ListDataProvider<ProductDto> dataProvider = DataProvider.ofCollection(products);
         grid.setDataProvider(dataProvider);
+
+        grid.addColumn(new ComponentRenderer<>(item ->
+        {
+            var showReviewButton = new Button("Reviews", event -> {
+                ComponentUtil.setData(UI.getCurrent(),"product", item);
+                UI.getCurrent().navigate("review");
+            });
+
+            return new HorizontalLayout(showReviewButton);
+        }));
 
         grid.addColumn(new ComponentRenderer<>(item ->
         {
