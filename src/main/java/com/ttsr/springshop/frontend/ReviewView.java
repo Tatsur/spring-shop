@@ -20,6 +20,8 @@ import java.util.UUID;
 
 @Route("review")
 public class ReviewView extends VerticalLayout {
+
+    //Spaghetti code, класс зависим от ReviewRepository, при том, что существует сервис для работы с Review.
     private final ReviewRepository reviewRepository;
     private final Authentication authentication;
 

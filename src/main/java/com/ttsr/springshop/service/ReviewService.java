@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+//Poltergeist, класс реализован только для того, чтобы соответствовать общей архитектуре проекта, но не несет в себе никакой ценности, являясь прослойкой
+//Я не вижу это ошибкой, так как предполагается добавить функционал для работы с Review.
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
