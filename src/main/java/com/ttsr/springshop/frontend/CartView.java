@@ -67,12 +67,15 @@ public class CartView extends VerticalLayout {
 
             return new HorizontalLayout(plusButton, minusButton);
         }));
-
+/*       Cryptic Code, из навзания button не ясно, для чего используется эта кнопка. Корректнее назвать checkoutButton
+*        Spaghetti code, доступ к репозиториям для всех классов, кроме репозитория OrderRepository, осуществляется через отдельные сервисы.
+*       В данном случае обращение к OrderRepository происходит напрямую. В качестве решения, можно создать отдельный сервис для работы с OrderRepository
+ */
         var button = new Button("Checkout", e -> {
             var order = new Order();
             order.setId(UUID.randomUUID());
             orderRepository.save(order);
-
+//Hard Code, тестовый почтовый адрес можно вынести в отдельную переменную конфигурации. Реализация не привязана к данным клиентов.
             mailService.sendMessage("random.address@gmail.com","Your order successful has been processed");
         });
 
