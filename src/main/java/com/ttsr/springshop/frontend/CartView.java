@@ -73,7 +73,7 @@ public class CartView extends VerticalLayout {
             order.setId(UUID.randomUUID());
             orderRepository.save(order);
 
-            mailService.sendMessage("i.a.polovnikov@gmail.com","Your order successful has been processed");
+            mailService.sendMessage("random.address@gmail.com","Your order successful has been processed");
         });
 
         add(grid,button);
